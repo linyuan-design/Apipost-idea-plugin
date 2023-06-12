@@ -26,6 +26,16 @@ public class ApiPostPrefixUrlSettingsForm {
 
     public ApiPostPrefixUrlSettingsForm() {
         addButton.addActionListener(new AddAction(prefixUrlTable));
+        addButton.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!Objects.equals(removeButton, e.getOppositeComponent())) {
+                    prefixUrlTable.clearSelection();
+                    removeButton.setEnabled(false);
+                }
+                super.focusLost(e);
+            }
+        });
         removeButton.addActionListener(new RemoveAction(prefixUrlTable));
 
         ListSelectionModel selectionModel = prefixUrlTable.getSelectionModel();
@@ -37,11 +47,11 @@ public class ApiPostPrefixUrlSettingsForm {
         prefixUrlTable.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (e.getOppositeComponent() != null &&
-                        !Objects.equals(removeButton.getInputContext(), e.getOppositeComponent().getInputContext())) {
+                if (!Objects.equals(removeButton, e.getOppositeComponent())) {
                     prefixUrlTable.clearSelection();
                     removeButton.setEnabled(false);
                 }
+                super.focusLost(e);
             }
         });
     }
